@@ -24,63 +24,60 @@ async function fetchProducts() {
   }
 }
 
+
 // Render products on the page
 function renderProducts(products) {
-  products.forEach(product => {
-    const productDiv = document.createElement('div');
-    productDiv.className = 'product'; // Using the class "product"
-
-    let currentImageIndex = 0;
-     // Function to update the image based on the current index
-     const updateImage = () => {
+    products.forEach(product => {
+      const productDiv = document.createElement('div');
+      productDiv.className = 'product'; // Using the class "product"
+  
+      let currentImageIndex = 0;
+      const updateImage = () => {
         const imageElement = productDiv.querySelector('.product-image');
-        imageElement.src = product.images[currentImageIndex]; // Update the image
+        imageElement.src = product.images[currentImageIndex];
       };
-
-    const nextImage = () => {
+  
+      const nextImage = () => {
         currentImageIndex = (currentImageIndex + 1) % product.images.length;
         updateImage();
       };
-    
-      // Function to go to the previous image
+  
       const prevImage = () => {
         currentImageIndex = (currentImageIndex - 1 + product.images.length) % product.images.length;
         updateImage();
       };
-      
-
-    
-
-    productDiv.innerHTML = `
-      <div class="img_con">
-      
-       <button class="prevBtn">&#10094;</button> <!-- Left arrow button -->
-        
-       
-        <img class="product-image" src="${product.images[currentImageIndex]}" alt="${product.title}" />
-        
-   
-       <button class="nextBtn">&#10095;</button> <!-- Right arrow button -->
-      </div>
-
-      <div class="card_footer">
+  
+      productDiv.innerHTML = `
+        <div class="img_con">
+          <button class="prevBtn">&#10094;</button> 
+          <img class="product-image" src="${product.images[currentImageIndex]}" alt="${product.title}" />
+          <button class="nextBtn">&#10095;</button> 
+        </div>
+        <div class="card_footer">
         <h3>${product.title}</h3>
         <p>Price : $${product.price}</p>
         <p>Rating: ${product.rating}</p>
-        <button class="addToCartBtn" onclick='addToCart(${JSON.stringify(product)})'>Add to Cart</button>
+        <button class="addToCartBtn">Add to Cart</button>
       </div>
     `;
 
     const prevBtn = productDiv.querySelector('.prevBtn');
     const nextBtn = productDiv.querySelector('.nextBtn');
+    const addToCartBtn = productDiv.querySelector('.addToCartBtn');
 
-    
-    prevBtn.addEventListener('click', prevImage); // Attach prevImage function to prev button
-    nextBtn.addEventListener('click', nextImage); // Attach nextImage function to next button
+    prevBtn.addEventListener('click', prevImage);
+    nextBtn.addEventListener('click', nextImage);
+    addToCartBtn.addEventListener('click', () => addToCart(product)); // Pass product directly
 
     productsContainer.appendChild(productDiv);
   });
 }
+
+
+
+
+
+
 
 // Function to add products to the cart
 function addToCart(product) {
